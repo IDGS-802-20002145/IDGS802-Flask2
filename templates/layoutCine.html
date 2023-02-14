@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+    <title>Cinepolis| Principal</title>
+</head>
+<style>
+    body {
+        padding-top: 10px;
+        background-image: url("../static/img/backCine.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    label {
+        color: whitesmoke;
+        font: bold;
+    }
+
+    h2 {
+        background-color: whitesmoke;
+        background-color: rgba(255, 255, 255, 0.5);
+        font-family: cursive;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    h4 {
+        color: whitesmoke;
+        font-weight: bold;
+    }
+
+    #section1 {
+        float: left;
+        border: 2px solid white;
+        padding: 10px;
+    }
+
+    #section2 {
+        float: right;
+        border: 2px solid white;
+        padding: 6px;
+    }
+
+    #section3 {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 50%;
+        text-align: center;
+        border: 2px solid white;
+        padding: 10px;
+    }
+</style>
+<link rel="stylesheet" href="../static/bootstrap/css/bootstrap-responsive.min.css">
+
+<body>
+    <div class="container">
+        {%block content%}
+        {%endblock%}
+    </div>
+
+</body>
+
+</html>

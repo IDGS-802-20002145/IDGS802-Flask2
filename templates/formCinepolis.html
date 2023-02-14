@@ -1,0 +1,76 @@
+{% extends "layoutCine.html" %}
+{%block content%}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/estilos.css">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="bootstrap-responsive">
+            <div style="text-align: center;" id="tittle">
+                <h2 class="bootstrap-responsive">Cinepolis</h2>
+
+            </div>
+            <form action="/desc" method="POST">
+                <main>
+                    <section id="section1">
+                        <h4 style="color: whitesmoke; text-align: center;">Entradas</h4>
+                        <div class="control-group">
+                            <label for="txtNombre" class="control-label">Nombre:
+                                <input type="text" name="txtNombre" value="">
+                            </label>
+                            <label for="txtCantidad" class="control-label">Cantidad Compradores:
+                                <input type="number" name="txtCantidadC" value="">
+                            </label>
+                            <label for="rbtnTarjeta" class="control-label">Tarjeta Cineco:
+                                <input type="radio" name="rbtnTarjeta" value="S">Si
+                                <input type="radio" name="rbtnTarjeta" value="N">No
+                            </label>
+                            <label for="txtCantidadBol" class="control-label">Cantidad De Boletos:
+                                <input type="text" name="txtCantidadBol" value="">
+                            </label>
+                        </div>
+                    </section>
+                    <section id="section2">
+                        <h4 style="color: whitesmoke;">Salidas</h4>
+                        <div class="control-group">
+                            <label for="txtValorP" class="control-label">Total a Pagar:
+                                <input type="text" name="txtValorP" value="{{total}}{{alert}}">
+                            </label>
+                        </div>
+
+                    </section>
+                    <section id="section3">
+                        <h4 style="color: whitesmoke; text-align: center;">Acciones</h4>
+                        <div class="controls">
+                            <button type="submit" class="btn btn-success">Procesar
+                            </button>
+                            <button type="" class="btn btn-danger">Salir
+                            </button>
+                        </div>
+
+                    </section>
+                </main>
+            </form>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+
+{%endblock%}
+
+
