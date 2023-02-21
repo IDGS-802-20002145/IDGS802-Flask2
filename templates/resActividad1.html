@@ -1,0 +1,13 @@
+{%extends "layout.html" %}
+
+{% block content %}
+<div class="col-xs-4">
+    <h5>Mayor numero: {{ max_value}}</h5>
+    <h5>Menor numero: {{min_value}}</h5>
+    <h5>Promedio: {{prom}}</h5>
+    <h5>Repetidos</h5>
+    <ul>
+        {{repetidos|safe}}
+    </ul>
+</div> 
+{% endblock %}

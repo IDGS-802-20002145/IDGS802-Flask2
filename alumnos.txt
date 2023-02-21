@@ -1,0 +1,12 @@
+Matricula: 12345
+Nombre: Mario
+Apellidos: Lopez
+Correo: sergioqlbq@gmail.comMatricula:12345,
+Nombre:Mario,
+Apellidos:Lopez,
+Correo:sergioqlbq@gmail.com,
+
+Matricula:12345
+Nombre:Mario
+Apellidos:Lopez
+Correo:sergioqlbq@gmail.com
