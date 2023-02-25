@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="col-x3-6">
+    {% from "_macros.html" import render_field %}
+
+    <div class="form-container form-container-left">
+        <form action="" method="POST" novalidate>
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}"> 
+            <section id="section1">
+                <h1>Agregar Palabras</h1>
+                <div class="form-control">
+                    {{ render_field(formGuardar.espanol) }}
+                    {{ render_field(formGuardar.ingles) }}
+                    <input type="submit" name="guardar" value="Guardar">
+                    
+                </div>
+            </section>
+        </form>
+    </div>
+
+    <div class="form-container form-container-right">
+        <form action="" method="POST" novalidate>
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}"> 
+            <section id="section2">
+                <h1>Buscar Palabras</h1>
+                <div class="form-control">
+                    {{ render_field(formBuscar.palabra_buscar) }}
+                    {{ render_field(formBuscar.respuesta) }}
+                    <input type="submit" name="buscar" value="Buscar">
+                   
+
+                    <div>
+                        {% if result %}
+                        <div class="form-control">
+                            <h1><p>{{ result }}</p></h1>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+</div>
+{% endblock %}

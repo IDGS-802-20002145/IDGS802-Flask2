@@ -1,13 +1,59 @@
 from flask import Flask, render_template
 from flask import request
 from collections import Counter
+from flask_wtf.csrf import CSRFProtect
+from flask import make_response #Este es para el manejo de Cookies
+from flask import flash #Esta es para ensajes flash, son avisos que van en la vista para el usuario 
+
+
 
 import forms
 import actividad1
+import actividadDic
 
 app=Flask(__name__)
+app.config['SECRET_KEY'] = "Esta es una clave encriptada"
+csrf= CSRFProtect()
 
 
+@app.errorhandler(404)
+def no_encontrada(e):
+    return render_template('404.html'),404
+
+@app.before_request
+def before_request():
+    print('numero1')
+
+@app.route("/cookies", methods=['GET','POST'])
+def cookies():
+    print('numero2')
+
+    reg_user=forms.LoginForm(request.form)
+    datos=''
+    if request.method=="POST" and reg_user.validate():
+        user= reg_user.username.data
+        passw = reg_user.password.data
+        datos = user+'@'+passw
+        success_message="Bienvenido {}".format(user)
+        flash(success_message)
+        
+    
+    
+    response = make_response(render_template('cookies.html', form=reg_user))
+    response.set_cookie('datos_user', datos)
+    return response
+
+@app.after_request
+def after_request(response):
+    print('numero3')
+    return response
+
+
+@app.route("/saludo")
+def saludo():
+    valor_cookies=request.cookies.get("datos_user")
+    nombre = valor_cookies.split('@')
+    return render_template('saludo.html', nom= nombre[0])
 
 @app.route("/")
 def formprueba():
@@ -67,5 +113,50 @@ def CajasDi():
             return render_template('resActividad1.html',form=reg_caja, max_value=max_value, min_value=min_value, prom=prom, repetidos = textoResultado)
     return render_template('actividad1.html', form=reg_caja)
 
+
+
+    
+@app.route('/Diccionario', methods=['GET', 'POST'])
+def index():
+    formGuardar = actividadDic.GuardarForm(request.form)
+    formBuscar = actividadDic.BuscarForm(request.form)
+    result = ''
+
+    # Si se presionó el botón de guardar
+    if request.method == 'POST' and 'guardar' in request.form:
+        if formGuardar.validate():
+            espanolP = formGuardar.espanol.data.upper()
+            inglesP = formGuardar.ingles.data.upper()
+
+            # Guarda la información en el archivo de texto
+            with open('diccionario.txt', 'a') as file:
+                file.write(espanolP + '=' + inglesP + '\n')
+    if request.method == 'POST' and 'limpiar' in request.form:
+       return render_template('diccionario.html', formGuardar=formGuardar, formBuscar=formBuscar, result=result)
+    # Si se presionó el botón de buscar
+    if request.method == 'POST' and 'buscar' in request.form:
+        if formBuscar.validate():
+            palabraBuscar = formBuscar.palabra_buscar.data.upper()
+            idioma = formBuscar.respuesta.data
+
+            # Busca la información en el archivo de texto
+            with open('diccionario.txt', 'r') as file:
+                for line in file:
+                    spanish, english = line.strip().split('=')
+                    if idioma == 'en' and spanish == palabraBuscar:
+                        result = english
+                        break
+                    elif idioma == 'es' and english == palabraBuscar:
+                        result = spanish
+                        break
+                else:
+                    result = 'Palabra no encontrada'
+    if request.method == 'POST' and 'limpiar' in request.form:
+       return render_template('diccionario.html', formGuardar=formGuardar, formBuscar=formBuscar, result=result)
+    return render_template('diccionario.html', formGuardar=formGuardar, formBuscar=formBuscar, result=result)
+
+
+
 if __name__ == "__main__":
+    csrf.init_app(app)
     app.run(debug=True,port=3000)
