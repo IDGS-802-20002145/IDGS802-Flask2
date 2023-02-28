@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from flask import request
 from collections import Counter
 from flask_wtf.csrf import CSRFProtect
+from config import Config
 from flask import make_response #Este es para el manejo de Cookies
 from flask import flash #Esta es para ensajes flash, son avisos que van en la vista para el usuario 
 
@@ -12,7 +13,11 @@ import actividad1
 import actividadDic
 
 app=Flask(__name__)
+
+
+
 app.config['SECRET_KEY'] = "Esta es una clave encriptada"
+app.config.from_object(Config)
 csrf= CSRFProtect()
 
 
@@ -117,7 +122,7 @@ def CajasDi():
 
     
 @app.route('/Diccionario', methods=['GET', 'POST'])
-def index():
+def resistencia():
     formGuardar = actividadDic.GuardarForm(request.form)
     formBuscar = actividadDic.BuscarForm(request.form)
     result = ''
@@ -155,6 +160,73 @@ def index():
        return render_template('diccionario.html', formGuardar=formGuardar, formBuscar=formBuscar, result=result)
     return render_template('diccionario.html', formGuardar=formGuardar, formBuscar=formBuscar, result=result)
 
+
+
+@app.route('/resistencia', methods=['GET', 'POST'])
+def index():
+    formRes = forms.ResistorForm(request.form)
+    colorBanda1 =""
+    colorBanda2 =""
+    hexaMultip = ""
+    colorTolerancia =""
+    valorResistencia =""
+    max_valor =""
+    min_valor =""
+    hexaBanda1 =""
+    hexaBanda2 =""
+    hexaTolerancia =""
+
+    if request.method == 'POST' and formRes.validate():
+   
+        colorBanda1 = formRes.band1.data
+        colorBanda2 = formRes.band2.data
+        colorMultiplicador = formRes.multiplier.data
+        colorTolerancia = formRes.tolerance.data
+      
+        hexaBanda1 = app.config['BAND_COLORS'][colorBanda1]
+        hexaBanda2 = app.config['BAND_COLORS'][colorBanda2]
+        hexaTolerancia = app.config['TOLERANCE_COLORS'][colorTolerancia]
+        hexaMultip = app.config['MULTIPLICADOR'][colorMultiplicador]
+
+
+        valorResistencia = (int(colorBanda1 + colorBanda2) * 10**int(colorMultiplicador))
+
+
+        valorNominal = int(colorBanda1 + colorBanda2) * 10**int(colorMultiplicador)
+
+        if colorTolerancia == 'oro':
+            valorTolerancia = 0.05
+        elif colorTolerancia == 'plata':
+            valorTolerancia = 0.1
+        else:
+            valorTolerancia = app.config['TOLERANCE_VALUES'][colorTolerancia]
+
+        max_valor = valorNominal * (1 + valorTolerancia)
+        min_valor = valorNominal * (1 - valorTolerancia)
+
+        #response = make_response(render_template('calculadora.html', formRes=formRes, band1_color=colorBanda1, band2_color=colorBanda2, 
+                       # multiplier_color=hexaMultip, tolerance_color=colorTolerancia, 
+                        #resistance_value=valorResistencia, resistance_max=max_valor, resistance_min=min_valor,
+                        #band1_name=hexaBanda1, band2_name=hexaBanda2, tolerance_name=hexaTolerancia))
+
+        #response.set_cookie('resistance_value', str(valorResistencia))
+        #response.set_cookie('resistance_max', str(max_valor))
+        #response.set_cookie('resistance_min', str(min_valor))
+        
+        success_message='¡El cálculo se ha realizado con éxito!, El valor de la resistencia es {}Ω'.format(valorResistencia)
+        flash(success_message)
+
+        #return response
+        
+    response = make_response(render_template('calculadora.html', formRes=formRes, band1_color=colorBanda1, band2_color=colorBanda2, 
+                        multiplier_color=hexaMultip, tolerance_color=colorTolerancia, 
+                        resistance_value=valorResistencia, resistance_max=max_valor, resistance_min=min_valor,
+                        band1_name=hexaBanda1, band2_name=hexaBanda2, tolerance_name=hexaTolerancia))
+
+    response.set_cookie('resistance_value', str(valorResistencia))
+    response.set_cookie('resistance_max', str(max_valor))
+    response.set_cookie('resistance_min', str(min_valor))
+    return response
 
 
 if __name__ == "__main__":
