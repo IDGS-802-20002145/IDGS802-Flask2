@@ -161,7 +161,6 @@ def resistencia():
     return render_template('diccionario.html', formGuardar=formGuardar, formBuscar=formBuscar, result=result)
 
 
-
 @app.route('/resistencia', methods=['GET', 'POST'])
 def index():
     formRes = forms.ResistorForm(request.form)
@@ -203,20 +202,10 @@ def index():
 
         max_valor = valorNominal * (1 + valorTolerancia)
         min_valor = valorNominal * (1 - valorTolerancia)
-
-        #response = make_response(render_template('calculadora.html', formRes=formRes, band1_color=colorBanda1, band2_color=colorBanda2, 
-                       # multiplier_color=hexaMultip, tolerance_color=colorTolerancia, 
-                        #resistance_value=valorResistencia, resistance_max=max_valor, resistance_min=min_valor,
-                        #band1_name=hexaBanda1, band2_name=hexaBanda2, tolerance_name=hexaTolerancia))
-
-        #response.set_cookie('resistance_value', str(valorResistencia))
-        #response.set_cookie('resistance_max', str(max_valor))
-        #response.set_cookie('resistance_min', str(min_valor))
+        
         
         success_message='¡El cálculo se ha realizado con éxito!, El valor de la resistencia es {}Ω'.format(valorResistencia)
         flash(success_message)
-
-        #return response
         
     response = make_response(render_template('calculadora.html', formRes=formRes, band1_color=colorBanda1, band2_color=colorBanda2, 
                         multiplier_color=hexaMultip, tolerance_color=colorTolerancia, 
